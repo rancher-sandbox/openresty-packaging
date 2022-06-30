@@ -16,6 +16,7 @@ subpackages="
     "
 source="
     https://openresty.org/download/$pkgname-$pkgver.tar.gz
+    proxy_connect_rewrite_102101.patch
 	$pkgname.initd
 	$pkgname.confd
 	"
@@ -66,6 +67,7 @@ build() {
         --with-threads \
         --with-compat \
         --with-luajit-xcflags='-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT' \
+        --add-module=/home/jan.linux/ngx_http_proxy_connect_module \
         -j$JOBS
 
     make -j$JOBS
@@ -171,6 +173,7 @@ static() {
 
 sha512sums="
 a388d9219b709c8e8042c65137db0ad3abd2094473f3cc65f389ab00d5884368e4e797466e0068787c8601be563da5f852d4294bd81bda47b329a22d76ccccb2  openresty-1.21.4.1.tar.gz
+ed4434ed582760852ac99dc0afeeaac83eccf1ddfe00bed4cba64de8c1443337cc778e04f4695d6a26888174e0835a993187bd4a206b7a59eae26be1658a3e84  proxy_connect_rewrite_102101.patch
 c7d2d89634410a7beb1e8d4cb7e168d0a2b067c37889fa67018afa940dcf99b5e05db4b1a1fcad7939fd70a896f2c90854631308ef11a307f4064e7eef329d99  openresty.initd
 20dd7897b9b183d194e11118385a3f0e35b1ed949ee45535b72b739457c32eaf596f769d91863cefb085920874f7eddb22eb25bf153cfd22aa416f29d32094c4  openresty.confd
 "
