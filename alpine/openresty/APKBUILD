@@ -1,29 +1,29 @@
 # Contributor: Yichun Zhang <admin@openresty.com>
 # Maintainer: Yichun Zhang <admin@openresty.com>
-pkgname="openresty"
+pkgname="rd-openresty"
 pkgver="1.21.4.1"
 pkgrel=0
 pkgdesc="OpenResty, scalable web platform by extending NGINX with Lua"
 url="https://openresty.org/"
 arch="all"
 license="BSD"
-depends="openresty-openssl111>=1.1.1n-r0 openresty-pcre openresty-zlib libgcc"
-makedepends="ccache perl openresty-openssl111-dev>=1.1.1n-r0 openresty-pcre-dev openresty-zlib-dev"
+depends="rd-openresty-openssl111>=1.1.1n-r0 rd-openresty-pcre rd-openresty-zlib libgcc"
+makedepends="ccache perl rd-openresty-openssl111-dev>=1.1.1n-r0 rd-openresty-pcre-dev rd-openresty-zlib-dev"
 install="$pkgname.pre-install $pkgname.post-install"
 subpackages="
     $pkgname-static $pkgname-restydoc:restydoc:noarch $pkgname-dbg
     $pkgname-resty:resty:noarch $pkgname-opm:opm:noarch
     "
 source="
-    https://openresty.org/download/$pkgname-$pkgver.tar.gz
+    https://openresty.org/download/openresty-$pkgver.tar.gz
     proxy_connect_rewrite_102101.patch
 	$pkgname.initd
 	$pkgname.confd
 	"
-builddir="$srcdir/$pkgname-$pkgver/"
+builddir="$srcdir/openresty-$pkgver/"
 options="!tracedeps !fhs"
 
-_orprefix="/usr/local/$pkgname"
+_orprefix="/usr/local/openresty"
 _zlib_prefix="$_orprefix/zlib"
 _pcre_prefix="$_orprefix/pcre"
 _openssl_prefix="$_orprefix/openssl111"
@@ -96,7 +96,7 @@ package() {
 
 resty() {
     pkgdesc="OpenResty command-line utility, resty"
-    depends="perl perl-getopt-long perl-file-temp perl-time-hires openresty=$pkgver-r$pkgrel"
+    depends="perl perl-getopt-long perl-file-temp perl-time-hires rd-openresty=$pkgver-r$pkgrel"
 
     mkdir -p "$subpkgdir/usr/bin"
     mkdir -p "$subpkgdir$_orprefix/bin"
@@ -107,7 +107,7 @@ resty() {
 
 restydoc() {
     pkgdesc="OpenResty documentation tool and data, restydoc"
-    depends="openresty=$pkgver-r$pkgrel perl groff"
+    depends="rd-openresty=$pkgver-r$pkgrel perl groff"
 
     mkdir -p "$subpkgdir/usr/bin"
     mkdir -p "$subpkgdir$_orprefix/bin"
@@ -124,8 +124,8 @@ restydoc() {
 
 opm() {
     pkgdesc="OpenResty Package Manager"
-    depends="openresty=$pkgver-r$pkgrel perl openresty-restydoc=$pkgver-r$pkgrel
-             openresty-resty=$pkgver-r$pkgrel perl-digest-md5 curl tar gzip
+    depends="rd-openresty=$pkgver-r$pkgrel perl rd-openresty-restydoc=$pkgver-r$pkgrel
+             rd-openresty-resty=$pkgver-r$pkgrel perl-digest-md5 curl tar gzip
              perl-encode perl-file-temp perl-getopt-long"
 
     mkdir -p "$subpkgdir/usr/bin"
@@ -174,6 +174,6 @@ static() {
 sha512sums="
 a388d9219b709c8e8042c65137db0ad3abd2094473f3cc65f389ab00d5884368e4e797466e0068787c8601be563da5f852d4294bd81bda47b329a22d76ccccb2  openresty-1.21.4.1.tar.gz
 ed4434ed582760852ac99dc0afeeaac83eccf1ddfe00bed4cba64de8c1443337cc778e04f4695d6a26888174e0835a993187bd4a206b7a59eae26be1658a3e84  proxy_connect_rewrite_102101.patch
-c7d2d89634410a7beb1e8d4cb7e168d0a2b067c37889fa67018afa940dcf99b5e05db4b1a1fcad7939fd70a896f2c90854631308ef11a307f4064e7eef329d99  openresty.initd
-20dd7897b9b183d194e11118385a3f0e35b1ed949ee45535b72b739457c32eaf596f769d91863cefb085920874f7eddb22eb25bf153cfd22aa416f29d32094c4  openresty.confd
+c7d2d89634410a7beb1e8d4cb7e168d0a2b067c37889fa67018afa940dcf99b5e05db4b1a1fcad7939fd70a896f2c90854631308ef11a307f4064e7eef329d99  rd-openresty.initd
+20dd7897b9b183d194e11118385a3f0e35b1ed949ee45535b72b739457c32eaf596f769d91863cefb085920874f7eddb22eb25bf153cfd22aa416f29d32094c4  rd-openresty.confd
 "

@@ -1,6 +1,6 @@
 # Contributor: Yichun Zhang <admin@openresty.com>
 # Maintainer: Yichun Zhang <admin@openresty.com>
-pkgname="openresty-pcre"
+pkgname="rd-openresty-pcre"
 pkgver="8.45"
 pkgrel=0
 pkgdesc="Perl-compatible regular expression library for OpenResty"

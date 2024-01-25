@@ -1,14 +1,14 @@
 # Contributor: Yichun Zhang <admin@openresty.com>
 # Maintainer: Yichun Zhang <admin@openresty.com>
-pkgname="openresty-openssl111"
+pkgname="rd-openresty-openssl111"
 pkgver="1.1.1s"
 pkgrel=0
 pkgdesc="OpenSSL 1.1.1 library for OpenResty"
 url="https://www.openssl.org/"
 arch="all"
 license="OpenSSL"
-depends="openresty-zlib"
-makedepends="perl openresty-zlib-dev ccache linux-headers"
+depends="rd-openresty-zlib"
+makedepends="perl rd-openresty-zlib-dev ccache linux-headers"
 #install=""
 subpackages="$pkgname-static $pkgname-dev $pkgname-dbg"
 source="https://www.openssl.org/source/openssl-$pkgver.tar.gz

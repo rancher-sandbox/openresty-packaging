@@ -1,6 +1,6 @@
 # Contributor: Yichun Zhang <admin@openresty.com>
 # Maintainer: Yichun Zhang <admin@openresty.com>
-pkgname="openresty-zlib"
+pkgname="rd-openresty-zlib"
 pkgver="1.3.1"
 pkgrel=1
 pkgdesc="The zlib compression library for OpenResty"
