@@ -67,7 +67,7 @@ build() {
         --with-threads \
         --with-compat \
         --with-luajit-xcflags='-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT' \
-        --add-module=/home/jan.linux/ngx_http_proxy_connect_module \
+        --add-module=../../../ngx_http_proxy_connect_module \
         -j$JOBS
 
     make -j$JOBS
