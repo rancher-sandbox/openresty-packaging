@@ -1,0 +1,30 @@
+name: Package OpenResty
+on:
+  workflow_dispatch: {}
+permissions: {}
+jobs:
+  package:
+    strategy:
+      matrix:
+        include:
+        - arch: amd64
+        - arch: arm64
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker/setup-qemu-action@v3
+      with:
+        platforms: ${{ matrix.arch }}
+    - uses: docker/setup-buildx-action@v3
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+    - run: >-
+        docker buildx build
+        --platform=linux/${{ matrix.arch }}
+        --output=type=local,dest=.
+        --file=.github/workflows/package.Dockerfile .
+    - uses: actions/upload-artifact@v4
+      with:
+        name: openresty-${{ matrix.arch }}.tar
+        path: openresty-${{ matrix.arch }}.tar
+        if-no-files-found: error
