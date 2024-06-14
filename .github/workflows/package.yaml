@@ -1,6 +1,23 @@
 name: Package OpenResty
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      alpine-version:
+        description: Alpine Linux release version to build for
+        default: '3.20'
+        required: false
+        type: string
+  workflow_call:
+    inputs:
+      alpine-version:
+        description: Alpine Linux release version to build for
+        default: '3.20'
+        required: false
+        type: string
+      release-version:
+        description: Rancher Desktop OpenResty release tag
+        required: false
+        type: string
 permissions: {}
 jobs:
   package:
@@ -22,9 +39,12 @@ jobs:
         docker buildx build
         --platform=linux/${{ matrix.arch }}
         --output=type=local,dest=.
-        --file=.github/workflows/package.Dockerfile .
+        --file=.github/workflows/package.Dockerfile
+        --build-arg=RELEASE_VERSION=${{ inputs.release-version }}
+        --build-arg=ALPINE_VERSION=${{ inputs.alpine-version }}
+        .
     - uses: actions/upload-artifact@v4
       with:
         name: openresty-${{ matrix.arch }}.tar
-        path: openresty-${{ matrix.arch }}.tar
+        path: openresty-*.tar
         if-no-files-found: error
