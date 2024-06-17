@@ -1,0 +1,26 @@
+name: Release OpenResty
+on: { push: { tags: [ '*' ] } }
+permissions: {}
+jobs:
+  package:
+    uses: ./.github/workflows/package.yaml
+    with:
+      release-version: ${{ github.ref_name }}
+  release:
+    needs: package
+    runs-on: ubuntu-latest
+    permissions: { contents: write }
+    steps:
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+    - name: Create release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ref: ${{ github.ref_name }}
+      run: >-
+        gh release create
+        "$ref"
+        openresty-*.tar/*.tar
+        --draft
+        --title "${ref#test-}"
+        --repo "${{ github.repository }}"

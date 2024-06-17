@@ -1,4 +1,5 @@
-FROM alpine:latest AS builder
+ARG ALPINE_VERSION=latest
+FROM alpine:${ALPINE_VERSION} AS builder
 
 RUN apk add alpine-sdk ccache doas git
 RUN adduser -D abuild-user
@@ -21,15 +22,19 @@ RUN abuild -r
 WORKDIR /alpine/openresty
 RUN abuild -r
 
+ARG TARGETARCH
+ARG RELEASE_VERSION
 WORKDIR /home/abuild-user/packages/alpine/
 RUN cp ~/.abuild/rd-openresty-*.pub .
-RUN tar cvf /tmp/openresty.tar \
+RUN tar cvf /tmp/openresty-${TARGETARCH}.tar \
     *.pub \
     $(uname -m)/rd-openresty-[0-9]*.apk \
     $(uname -m)/rd-openresty-openssl111-[0-9]*.apk \
     $(uname -m)/rd-openresty-pcre-[0-9]*.apk \
     $(uname -m)/rd-openresty-zlib-[0-9]*.apk
+RUN if [ -n "${RELEASE_VERSION}" ]; \
+    then mv /tmp/openresty-${TARGETARCH}.tar /tmp/openresty-${RELEASE_VERSION}-${TARGETARCH}.tar; \
+    fi
 
 FROM scratch
-ARG TARGETARCH
-COPY --from=builder /tmp/openresty.tar /openresty-${TARGETARCH}.tar
+COPY --from=builder /tmp/openresty*.tar /
