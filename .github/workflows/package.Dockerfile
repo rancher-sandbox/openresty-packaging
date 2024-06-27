@@ -22,18 +22,17 @@ RUN abuild -r
 WORKDIR /alpine/openresty
 RUN abuild -r
 
-ARG TARGETARCH
 ARG RELEASE_VERSION
 WORKDIR /home/abuild-user/packages/alpine/
 RUN cp ~/.abuild/rd-openresty-*.pub .
-RUN tar cvf /tmp/openresty-${TARGETARCH}.tar \
+RUN tar cvf /tmp/openresty-$(uname -m).tar \
     *.pub \
     $(uname -m)/rd-openresty-[0-9]*.apk \
     $(uname -m)/rd-openresty-openssl111-[0-9]*.apk \
     $(uname -m)/rd-openresty-pcre-[0-9]*.apk \
     $(uname -m)/rd-openresty-zlib-[0-9]*.apk
 RUN if [ -n "${RELEASE_VERSION}" ]; \
-    then mv /tmp/openresty-${TARGETARCH}.tar /tmp/openresty-${RELEASE_VERSION}-${TARGETARCH}.tar; \
+    then mv /tmp/openresty-$(uname -m).tar /tmp/openresty-${RELEASE_VERSION}-$(uname -m).tar; \
     fi
 
 FROM scratch
