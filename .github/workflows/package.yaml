@@ -48,3 +48,48 @@ jobs:
         name: openresty-${{ matrix.arch }}.tar
         path: openresty-*.tar
         if-no-files-found: error
+  package-opensuse:
+    strategy:
+      matrix:
+        include:
+        - arch: amd64
+        - arch: arm64
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker/setup-qemu-action@v3
+      with:
+        platforms: ${{ matrix.arch }}
+    - uses: docker/setup-buildx-action@v3
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+    - run: >-
+        docker buildx build
+        --platform=linux/${{ matrix.arch }}
+        --output=type=local,dest=.
+        --file=.github/workflows/package-opensuse.Dockerfile
+        .
+    - run: ls -laR 
+    - uses: actions/upload-artifact@v4
+      with:
+        name: rpms-${{ matrix.arch }}
+        path: |
+          RPMS/
+          SRPMS/
+        if-no-files-found: error
+  render-opensuse:
+    needs: package-opensuse
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pages: write
+    steps:
+    - run: sudo DEBIAN_FRONTEND=noninteractive apt-get install createrepo-c
+    - uses: actions/download-artifact@v4
+      with:
+        merge-multiple: true
+    - run: createrepo_c --no-database .
+    - uses: actions/upload-pages-artifact@v3
+      with:
+        path: .
+    - uses: actions/deploy-pages@v4

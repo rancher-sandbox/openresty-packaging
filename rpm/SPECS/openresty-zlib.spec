@@ -1,4 +1,4 @@
-Name:               openresty-zlib
+Name:               rd-openresty-zlib
 Version:            1.2.12
 Release:            1%{?dist}
 Summary:            The zlib compression library for OpenResty
@@ -8,9 +8,9 @@ Group:              System Environment/Libraries
 # /contrib/dotzlib/ have Boost license
 License:            zlib and Boost
 URL:                https://www.zlib.net/
-Source0:            https://www.zlib.net/zlib-%{version}.tar.xz
+Source0:            https://www.zlib.net/fossils/zlib-%{version}.tar.gz
 
-BuildRoot:          %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildRoot:          %{_tmppath}/%{name}-%{version}-%{release}
 
 BuildRequires:      libtool
 

@@ -1,4 +1,4 @@
-Name:               openresty-pcre
+Name:               rd-openresty-pcre
 Version:            8.45
 Release:            1%{?dist}
 Summary:            Perl-compatible regular expression library for OpenResty

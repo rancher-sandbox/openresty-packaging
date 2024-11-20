@@ -1,4 +1,4 @@
-Name:           openresty
+Name:           rd-openresty
 Version:        1.21.4.1
 Release:        1%{?dist}
 Summary:        OpenResty, scalable web platform by extending NGINX with Lua
@@ -18,33 +18,35 @@ Source0:        https://openresty.org/download/openresty-%{version}.tar.gz
 
 Source1:        openresty.service
 Source2:        openresty.init
+Source3:        https://github.com/chobits/ngx_http_proxy_connect_module/archive/refs/tags/v0.0.3.tar.gz#/ngx_http_proxy_connect_module-0.0.3.tar.gz
+
+Patch0:         proxy_connect_rewrite_102101.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  perl-File-Temp
 BuildRequires:  ccache, gcc, make, perl, systemtap-sdt-devel
-BuildRequires:  openresty-zlib-devel >= 1.2.12-1
-BuildRequires:  openresty-openssl111-devel >= 1.1.1n-1
-BuildRequires:  openresty-pcre-devel >= 8.45-1
-Requires:       openresty-zlib >= 1.2.12-1
-Requires:       openresty-openssl111 >= 1.1.1n-1
-Requires:       openresty-pcre >= 8.45-1
+BuildRequires:  %{name}-zlib-devel >= 1.2.12-1
+BuildRequires:  %{name}-openssl111-devel >= 1.1.1n-1
+BuildRequires:  %{name}-pcre-devel >= 8.45-1
+Requires:       %{name}-zlib >= 1.2.12-1
+Requires:       %{name}-openssl111 >= 1.1.1n-1
+Requires:       %{name}-pcre >= 8.45-1
+Conflicts:      openresty
 
+
+%if 0%{?use_systemd}
+
+BuildRequires:  systemd
+Requires:       systemd
+
+%else
 
 %if 0%{?suse_version}
 
 # for /sbin/service
 Requires(post):  insserv-compat
 Requires(preun): insserv-compat
-
-BuildRequires:  systemd
-
-%else
-
-%if 0%{?use_systemd}
-
-BuildRequires:  systemd
-Requires:       systemd
 
 %else
 
@@ -58,7 +60,7 @@ Requires(preun): chkconfig, initscripts
 
 AutoReqProv:        no
 
-%define orprefix            %{_usr}/local/%{name}
+%define orprefix            %{_usr}/local/openresty
 %define zlib_prefix         %{orprefix}/zlib
 %define pcre_prefix         %{orprefix}/pcre
 %define openssl_prefix      %{orprefix}/openssl111
@@ -115,7 +117,7 @@ a single box.
 
 Summary:        OpenResty command-line utility, resty
 Group:          Development/Tools
-Requires:       perl, openresty >= %{version}-%{release}
+Requires:       perl, %{name} >= %{version}-%{release}
 Requires:       perl(File::Spec), perl(FindBin), perl(List::Util), perl(Getopt::Long), perl(File::Temp), perl(POSIX), perl(Time::HiRes)
 
 %if 0%{?fedora} >= 10 || 0%{?rhel} >= 6 || 0%{?centos} >= 6
@@ -171,8 +173,8 @@ services, and dynamic web gateways.
 
 Summary:        OpenResty Package Manager
 Group:          Development/Tools
-Requires:       perl, openresty >= %{version}-%{release}, perl(Digest::MD5)
-Requires:       openresty-doc >= %{version}-%{release}, openresty-resty >= %{version}-%{release}
+Requires:       perl, %{name} >= %{version}-%{release}, perl(Digest::MD5)
+Requires:       %{name}-doc >= %{version}-%{release}, %{name}-resty >= %{version}-%{release}
 Requires:       curl, tar, gzip
 #BuildRequires:  perl(Digest::MD5)
 Requires:       perl(Encode), perl(FindBin), perl(File::Find), perl(File::Path), perl(File::Spec), perl(Cwd), perl(Digest::MD5), perl(File::Copy), perl(File::Temp), perl(Getopt::Long)
@@ -187,8 +189,8 @@ This package provides the client side tool, opm, for OpenResty Pakcage Manager (
 
 
 %prep
-%setup -q -n "openresty-%{version}"
-
+%setup -q -b3 -n "openresty-%{version}"
+%patch0 -p1
 
 %build
 ./configure \
@@ -222,6 +224,7 @@ This package provides the client side tool, opm, for OpenResty Pakcage Manager (
     --with-threads \
     --with-compat \
     --with-luajit-xcflags='-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT' \
+    --add-module=../ngx_http_proxy_connect_module-0.0.3 \
     -j`nproc`
 
 make -j`nproc`
@@ -294,9 +297,9 @@ fi
 %defattr(-,root,root,-)
 
 %if 0%{?use_systemd}
-%{_unitdir}/%{name}.service
+%{_unitdir}/openresty.service
 %else
-/etc/init.d/%{name}
+/etc/init.d/openresty
 %endif
 /usr/bin/%{name}
 %{orprefix}/bin/openresty

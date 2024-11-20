@@ -1,4 +1,4 @@
-Name:               openresty-openssl111
+Name:               rd-openresty-openssl111
 Version:            1.1.1s
 Release:            1%{?dist}
 Summary:            OpenSSL library for OpenResty
@@ -17,8 +17,8 @@ Patch0:             https://raw.githubusercontent.com/openresty/openresty/master
 BuildRoot:          %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:      gcc, make, perl
-BuildRequires:      openresty-zlib-devel >= 1.2.11
-Requires:           openresty-zlib >= 1.2.11
+BuildRequires:      rd-openresty-zlib-devel >= 1.2.11
+Requires:           rd-openresty-zlib >= 1.2.11
 
 AutoReqProv:        no
 
