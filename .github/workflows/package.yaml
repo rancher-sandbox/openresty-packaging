@@ -4,14 +4,14 @@ on:
     inputs:
       alpine-version:
         description: Alpine Linux release version to build for
-        default: '3.20'
+        default: '3.21.3'
         required: false
         type: string
   workflow_call:
     inputs:
       alpine-version:
         description: Alpine Linux release version to build for
-        default: '3.20'
+        default: '3.21.3'
         required: false
         type: string
       release-version:
