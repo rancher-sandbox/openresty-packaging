@@ -3,6 +3,9 @@ on: { push: { tags: [ '*' ] } }
 permissions: {}
 jobs:
   package:
+    permissions:
+      id-token: write # Needed for render-opensuse
+      pages: write # Needed for render-opensuse
     uses: ./.github/workflows/package.yaml
     with:
       release-version: ${{ github.ref_name }}
