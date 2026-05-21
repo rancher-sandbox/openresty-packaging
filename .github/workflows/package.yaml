@@ -30,11 +30,11 @@ jobs:
           runs-on: ubuntu-24.04-arm
     runs-on: ${{ matrix.runs-on }}
     steps:
-    - uses: docker/setup-qemu-action@v3
+    - uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3.7.0
       with:
         platforms: ${{ matrix.arch }}
-    - uses: docker/setup-buildx-action@v3
-    - uses: actions/checkout@v4
+    - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
+    - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       with:
         persist-credentials: false
     - run: >-
@@ -45,7 +45,7 @@ jobs:
         --build-arg=RELEASE_VERSION=${{ inputs.release-version }}
         --build-arg=ALPINE_VERSION=${{ inputs.alpine-version }}
         .
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: openresty-${{ matrix.arch }}.tar
         path: openresty-*.tar
@@ -60,11 +60,11 @@ jobs:
           runs-on: ubuntu-24.04-arm
     runs-on: ${{ matrix.runs-on }}
     steps:
-    - uses: docker/setup-qemu-action@v3
+    - uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3.7.0
       with:
         platforms: ${{ matrix.arch }}
-    - uses: docker/setup-buildx-action@v3
-    - uses: actions/checkout@v4
+    - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
+    - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       with:
         persist-credentials: false
     - run: >-
@@ -73,8 +73,8 @@ jobs:
         --output=type=local,dest=.
         --file=.github/workflows/package-opensuse.Dockerfile
         .
-    - run: ls -laR 
-    - uses: actions/upload-artifact@v4
+    - run: ls -laR
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: rpms-${{ matrix.arch }}
         path: |
@@ -89,11 +89,11 @@ jobs:
       pages: write
     steps:
     - run: sudo DEBIAN_FRONTEND=noninteractive apt-get install createrepo-c
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
       with:
         merge-multiple: true
     - run: createrepo_c --no-database .
-    - uses: actions/upload-pages-artifact@v3
+    - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
       with:
         path: .
-    - uses: actions/deploy-pages@v4
+    - uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
